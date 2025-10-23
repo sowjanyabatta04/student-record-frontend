@@ -7,12 +7,12 @@ function App() {
   const [form, setForm] = useState({ name: "", rollNumber: "", course: "", marks: "" });
   const [search, setSearch] = useState("");
 
-  // Fetch students on load
+  // Fetch all students on component mount
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  // Get all students
+  // GET /api/students
   const fetchStudents = async () => {
     try {
       const res = await api.get("/api/students");
@@ -22,7 +22,7 @@ function App() {
     }
   };
 
-  // Add new student
+  // POST /api/students
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,7 +35,7 @@ function App() {
     }
   };
 
-  // Delete a student
+  // DELETE /api/students/:rollNumber
   const handleDelete = async (rollNumber) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
     try {
@@ -46,7 +46,7 @@ function App() {
     }
   };
 
-  // Filtered students for search
+  // Filter students by search
   const filteredStudents = students.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -87,7 +87,7 @@ function App() {
         <button type="submit">Add Student</button>
       </form>
 
-      {/* Search */}
+      {/* Search Input */}
       <input
         placeholder="Search by Name or Roll Number"
         value={search}
