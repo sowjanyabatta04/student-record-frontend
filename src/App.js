@@ -7,22 +7,19 @@ function App() {
   const [form, setForm] = useState({ name: "", rollNumber: "", course: "", marks: "" });
   const [search, setSearch] = useState("");
 
-  // Fetch all students on component mount
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  // GET /api/students
   const fetchStudents = async () => {
     try {
       const res = await api.get("/api/students");
       setStudents(res.data);
     } catch (err) {
-      console.error("Failed to fetch students:", err);
+      console.error(err);
     }
   };
 
-  // POST /api/students
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,67 +32,35 @@ function App() {
     }
   };
 
-  // DELETE /api/students/:rollNumber
   const handleDelete = async (rollNumber) => {
-    if (!window.confirm("Are you sure you want to delete this student?")) return;
+    if (!window.confirm("Are you sure?")) return;
     try {
       await api.delete(`/api/students/${rollNumber}`);
       fetchStudents();
     } catch (err) {
-      console.error("Failed to delete student:", err);
+      console.error(err);
     }
   };
 
-  // Filter students by search
   const filteredStudents = students.filter(
-    (s) =>
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.rollNumber.toLowerCase().includes(search.toLowerCase())
+    s => s.name.toLowerCase().includes(search.toLowerCase()) ||
+         s.rollNumber.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="container">
       <h1>Student Record Management</h1>
 
-      {/* Add Student Form */}
       <form onSubmit={handleSubmit} className="form-container">
-        <input
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Roll Number"
-          value={form.rollNumber}
-          onChange={(e) => setForm({ ...form, rollNumber: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Course"
-          value={form.course}
-          onChange={(e) => setForm({ ...form, course: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Marks"
-          type="number"
-          value={form.marks}
-          onChange={(e) => setForm({ ...form, marks: e.target.value })}
-          required
-        />
+        <input placeholder="Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
+        <input placeholder="Roll Number" value={form.rollNumber} onChange={e => setForm({ ...form, rollNumber: e.target.value })} required />
+        <input placeholder="Course" value={form.course} onChange={e => setForm({ ...form, course: e.target.value })} required />
+        <input placeholder="Marks" type="number" value={form.marks} onChange={e => setForm({ ...form, marks: e.target.value })} required />
         <button type="submit">Add Student</button>
       </form>
 
-      {/* Search Input */}
-      <input
-        placeholder="Search by Name or Roll Number"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search-input"
-      />
+      <input placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} className="search-input" />
 
-      {/* Student Table */}
       <table>
         <thead>
           <tr>
@@ -107,7 +72,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {filteredStudents.map((s) => (
+          {filteredStudents.map(s => (
             <tr key={s.rollNumber}>
               <td>{s.name}</td>
               <td>{s.rollNumber}</td>
