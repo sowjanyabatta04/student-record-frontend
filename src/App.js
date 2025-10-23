@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "./api"; // use api.js
 import "./App.css";
-
-// Use env variable for backend URL
-const apiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -16,7 +13,7 @@ function App() {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get(apiUrl);
+      const res = await api.get("/api/students"); // include /api/students
       setStudents(res.data);
     } catch (err) {
       console.error(err);
@@ -26,7 +23,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(apiUrl, { ...form, marks: Number(form.marks) });
+      await api.post("/api/students", { ...form, marks: Number(form.marks) });
       setForm({ name: "", rollNumber: "", course: "", marks: "" });
       fetchStudents();
     } catch (err) {
@@ -36,7 +33,7 @@ function App() {
 
   const handleDelete = async (rollNumber) => {
     try {
-      await axios.delete(`${apiUrl}/${rollNumber}`);
+      await api.delete(`/api/students/${rollNumber}`);
       fetchStudents();
     } catch (err) {
       console.error(err);
