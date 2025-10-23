@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://student-record-backend-1.onrender.com",
+  baseURL: process.env.REACT_APP_API_URL,
 });
